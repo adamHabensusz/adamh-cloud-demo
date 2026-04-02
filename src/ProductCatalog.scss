@@ -1,0 +1,161 @@
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/theme' as *;
+@use '@carbon/react/scss/colors' as *;
+
+.content-switcher-wrapper {
+  margin-top: $spacing-05;
+  margin-bottom: $spacing-05;
+}
+
+.product-catalog-page {
+  min-height: 100vh;
+  background-color: $background;
+}
+
+.page-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid $border-subtle;
+  padding: $spacing-06 0 0;
+  position: sticky;
+  top: 48px; // Height of the main header
+  z-index: 100;
+  transition: padding 0.3s ease;
+
+  &.scrolled {
+    padding: $spacing-03 0 0;
+  }
+
+  .page-header-content {
+    max-width: 1584px;
+    margin: 0 auto;
+    padding: 0 1rem 0 0;
+    padding-left: 0;
+  }
+
+  .header-top-content {
+    max-height: 500px;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease;
+    opacity: 1;
+
+    &.hidden {
+      max-height: 0;
+      opacity: 0;
+      margin: 0;
+    }
+  }
+
+  .page-title-section {
+    margin-top: $spacing-05;
+  }
+
+  .page-title {
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1.25;
+    margin: 0 0 $spacing-03;
+    color: $text-primary;
+  }
+
+  .page-description {
+    font-size: 1rem;
+    color: $text-secondary;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .catalog-chat-field {
+    margin-top: $spacing-06;
+    max-width: 800px;
+
+    .cds--search-input {
+      border-radius: 8px !important;
+      box-shadow: none !important;
+    }
+  }
+
+  .catalog-tabs {
+    margin-top: $spacing-06;
+    margin-left: 0;
+    margin-right: -1rem;
+    padding-left: 0;
+    
+    .cds--tabs {
+      margin-bottom: 0;
+    }
+    
+    .cds--tabs__nav {
+      border-bottom: none;
+    }
+    
+    .cds--tab-content {
+      padding: 0;
+    }
+  }
+}
+
+.page-content {
+  max-width: 1584px;
+  margin: 0 auto;
+  padding: $spacing-09 1rem $spacing-06 0;
+  padding-left: 0;
+
+  .section-heading {
+    // heading-03
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: 0;
+    margin: 0 0 $spacing-05;
+    padding-top: 32px;
+    color: $text-primary;
+  }
+
+  .view-switcher {
+    margin-bottom: $spacing-06;
+  }
+
+  .catalog-controls {
+    display: flex;
+    gap: $spacing-05;
+    align-items: flex-end;
+    margin-bottom: $spacing-06;
+
+    .cds--search {
+      flex: 1;
+      max-width: 400px;
+    }
+  }
+
+  .cds--tabs {
+    .cds--tab-content {
+      padding: $spacing-09 0 $spacing-06 0;
+    }
+  }
+
+  .catalog-grid {
+    padding: $spacing-05 0;
+    color: $text-secondary;
+    font-size: 0.875rem;
+  }
+}
+
+// Breadcrumb styling
+.cds--breadcrumb {
+  margin-bottom: 0;
+}
+
+.cds--breadcrumb-item {
+  font-size: 0.875rem;
+}
+
+// Tab styling adjustments
+.cds--tabs__nav {
+  border-bottom: 1px solid $border-subtle;
+}
+
+.cds--tab--selected {
+  border-bottom-color: $border-interactive;
+}
+
+// Made with Bob

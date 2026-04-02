@@ -1,0 +1,252 @@
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/theme' as *;
+@use '@carbon/react/scss/type' as *;
+
+.product-details-modal {
+  .cds--modal-container {
+    max-width: 1200px;
+    max-height: 90vh;
+    animation: slideInFromBottom 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &.closing .cds--modal-container {
+    animation: slideOutToBottom 0.3s ease-in;
+  }
+
+  .cds--modal-header {
+    display: none;
+  }
+
+  .cds--modal-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .modal-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .modal-scrollable-content {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+  }
+
+  .modal-custom-header {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-05;
+    padding: $spacing-06 $spacing-06 0;
+    border-bottom: 1px solid $border-subtle;
+    flex-shrink: 0;
+  }
+
+  .modal-header-icon {
+    flex-shrink: 0;
+    color: $icon-primary;
+    margin-top: $spacing-02;
+    order: 2;
+  }
+
+  .modal-title-section {
+    flex: 1;
+    order: 1;
+  }
+
+  .modal-title {
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1.25;
+    margin: 0 0 $spacing-03;
+    color: $text-primary;
+  }
+
+  .modal-description {
+    font-size: 1rem;
+    color: $text-secondary;
+    margin: 0 0 $spacing-07;
+    line-height: 1.5;
+  }
+
+  .cds--tabs {
+    margin-top: 0;
+  }
+
+  .cds--tabs__nav {
+    padding-left: 0;
+    padding-right: $spacing-06;
+  }
+
+  .cds--tab-content {
+    padding: $spacing-06;
+    overflow: visible;
+  }
+
+  .modal-content {
+    display: flex;
+    gap: $spacing-07;
+  }
+
+  .modal-sidebar {
+    flex: 0 0 200px;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-06;
+  }
+
+  .sidebar-section {
+    .sidebar-title {
+      @include type-style('label-01');
+      color: $text-secondary;
+      margin: 0 0 $spacing-03;
+    }
+
+    .sidebar-list {
+      list-style: disc;
+      padding-left: $spacing-05;
+      margin: 0;
+
+      li {
+        @include type-style('body-01');
+        color: $text-primary;
+        margin-bottom: $spacing-02;
+      }
+    }
+
+    .sidebar-text {
+      @include type-style('body-01');
+      color: $text-primary;
+      margin: 0;
+    }
+  }
+
+  .modal-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .content-section {
+    margin-bottom: $spacing-07;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-heading {
+      @include type-style('heading-03');
+      color: $text-primary;
+      margin: 0 0 $spacing-05;
+    }
+
+    .section-text {
+      @include type-style('body-01');
+      color: $text-primary;
+      line-height: 1.5;
+      margin: 0;
+    }
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-06;
+  }
+
+  .requirements-tutorials-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-07;
+    margin-bottom: $spacing-07;
+  }
+
+  .feature-item {
+    .feature-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      margin-bottom: $spacing-04;
+      color: $icon-primary;
+    }
+
+    .feature-title {
+      @include type-style('heading-01');
+      color: $text-primary;
+      margin: 0 0 $spacing-03;
+    }
+
+    .feature-description {
+      @include type-style('body-01');
+      color: $text-primary;
+      line-height: 1.5;
+      margin: 0;
+    }
+  }
+
+  .requirements-list,
+  .tutorials-list {
+    list-style: disc;
+    padding-left: $spacing-05;
+    margin: 0 0 $spacing-04;
+
+    li {
+      @include type-style('body-01');
+      color: $text-primary;
+      margin-bottom: $spacing-02;
+    }
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-05 $spacing-06;
+    border-top: 1px solid $border-subtle;
+    background-color: #ffffff;
+    flex-shrink: 0;
+  }
+
+  .modal-footer-left {
+    display: flex;
+    gap: $spacing-03;
+  }
+
+  .modal-footer-right {
+    display: flex;
+    gap: $spacing-03;
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToBottom {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+// Made with Bob

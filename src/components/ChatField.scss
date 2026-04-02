@@ -1,0 +1,28 @@
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/theme' as *;
+
+.chat-field-container {
+  position: relative;
+  width: 100%;
+
+  .cds--search {
+    width: 100%;
+  }
+
+  .chat-field-actions {
+    position: absolute;
+    right: $spacing-03;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: $spacing-02;
+    align-items: center;
+    pointer-events: none;
+
+    button {
+      pointer-events: all;
+    }
+  }
+}
+
+// Made with Bob

@@ -1,0 +1,177 @@
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/theme' as *;
+@use '@carbon/react/scss/type' as *;
+
+.all-products-heading {
+  @include type-style('heading-03');
+  color: $text-primary;
+  width: 100%;
+  padding-top: 32px;
+}
+
+.all-products-background {
+  background-color: $background;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  padding-left: calc(50vw - 50%);
+  padding-right: calc(50vw - 50%);
+}
+
+.all-products-content {
+  background-color: $background;
+  padding-top: 32px;
+}
+
+.filters-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-03;
+  padding-top: 32px;
+}
+
+.selected-filter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-03 $spacing-04;
+  background-color: $layer-01;
+  border: 1px solid $border-strong;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  color: $text-primary;
+
+  .remove-filter-btn {
+    background: none;
+    border: none;
+    color: $text-primary;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    margin-left: $spacing-03;
+    
+    &:hover {
+      color: $text-secondary;
+    }
+  }
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-03;
+}
+
+.filter-item {
+  .cds--checkbox-label {
+    @include type-style('body-01');
+    color: $text-primary;
+  }
+}
+
+.products-main {
+  padding-top: 32px;
+}
+
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-06;
+}
+
+.search-results-text {
+  @include type-style('body-01');
+  color: $text-primary;
+  margin: 0;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-05;
+  margin-bottom: $spacing-06;
+}
+
+.product-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: $spacing-05;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: $layer-hover;
+
+    .product-tile-footer-buttons {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+.product-tile-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  cursor: pointer;
+  flex: 1;
+}
+
+.product-tile-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: $icon-primary;
+  margin-bottom: $spacing-04;
+}
+
+.product-tile-title {
+  // heading-01
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.29;
+  letter-spacing: 0.16px;
+  margin: 0 0 $spacing-02;
+  color: $text-primary;
+}
+
+.product-tile-description {
+  font-size: 0.875rem;
+  color: $text-secondary;
+  margin: 0 0 $spacing-03;
+  line-height: 1.43;
+}
+
+.product-tile-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  margin-top: auto;
+}
+
+.product-tile-footer-buttons {
+  display: flex;
+  gap: 0;
+  margin-left: auto;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+}
+
+.products-footer {
+  display: flex;
+  justify-content: flex-start;
+  padding: $spacing-06 0;
+}
+
+.show-more-link {
+  @include type-style('body-01');
+  font-weight: 600;
+}
+
+// Made with Bob
