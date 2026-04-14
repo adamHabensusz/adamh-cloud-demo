@@ -16,7 +16,12 @@ import {
   Tab,
   TabPanels,
   TabPanel,
-  TextInput,
+  Tag,
+  TextArea,
+  StructuredListWrapper,
+  StructuredListBody,
+  StructuredListRow,
+  StructuredListCell,
 } from '@carbon/react';
 import {
   Notification,
@@ -35,15 +40,11 @@ import {
   Asleep,
   Light,
   Close,
-  Chat,
-  Calendar,
-  ChartLine,
-  ThumbsUp,
-  ThumbsDown,
-  Renew,
-  SendAlt,
+  Upload,
+  At,
   Microphone,
-  OverflowMenuHorizontal,
+  SendAlt,
+  Add,
 } from '@carbon/icons-react';
 import Home from './Home';
 import ProductCatalog from './ProductCatalog';
@@ -51,7 +52,19 @@ import Create from './Create';
 import Activities from './Activities';
 import ResourceList from './ResourceList';
 import ResourceDetails from './ResourceDetails';
+import ChatField from './components/ChatField';
 import './App.scss';
+
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+interface ChatHistory {
+  id: string;
+  title: string;
+  messages: ChatMessage[];
+}
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -61,6 +74,42 @@ const AppContent: React.FC = () => {
   const [accountName, setAccountName] = useState("Adam Habensusz's Account");
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isAiPanelOpen, setIsAiPanelOpen] = useState(false);
+  const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState(0);
+
+  // Dummy chat histories
+  const chatHistories: ChatHistory[] = [
+    {
+      id: 'chat-1',
+      title: 'Compare resource distribution',
+      messages: [
+        { role: 'user', content: 'Compare resource distribution' },
+        { role: 'assistant', content: 'I\'ve analyzed your resource distribution across regions. Here\'s what I found:\n\n• US-East: 45% (23 resources)\n• US-West: 30% (15 resources)\n• EU-Central: 25% (13 resources)\n\nYour resources are well-distributed with a slight concentration in US-East, which aligns with your primary user base location.' },
+        { role: 'user', content: 'What about cost distribution?' },
+        { role: 'assistant', content: 'Cost distribution follows a similar pattern:\n\n• US-East: $567/month (42%)\n• US-West: $445/month (33%)\n• EU-Central: $335/month (25%)\n\nThe cost-per-resource ratio is consistent across regions, indicating efficient resource utilization.' }
+      ]
+    },
+    {
+      id: 'chat-2',
+      title: 'Timeline of performance degradation',
+      messages: [
+        { role: 'user', content: 'Timeline of performance degradation' },
+        { role: 'assistant', content: 'I\'ve identified a performance degradation pattern over the past 7 days:\n\n• Day 1-3: Normal performance (avg response time: 120ms)\n• Day 4-5: Slight degradation (avg response time: 180ms)\n• Day 6-7: Significant degradation (avg response time: 350ms)\n\nThe degradation correlates with increased traffic volume (+40%) and database query complexity.' },
+        { role: 'user', content: 'What\'s causing this?' },
+        { role: 'assistant', content: 'Root causes identified:\n\n1. Database connection pool exhaustion\n2. Unoptimized queries on the orders table\n3. Insufficient cache hit rate (dropped from 85% to 62%)\n\nRecommendations:\n• Increase connection pool size from 20 to 40\n• Add indexes on frequently queried columns\n• Implement Redis caching for hot data' }
+      ]
+    },
+    {
+      id: 'chat-3',
+      title: 'Generate a billing anomaly report',
+      messages: [
+        { role: 'user', content: 'Generate a billing anomaly report' },
+        { role: 'assistant', content: 'Billing Anomaly Report - March 2024\n\nI\'ve detected 3 anomalies in your billing:\n\n1. **Storage Spike** (March 15-18)\n   • Unexpected 300GB increase in Object Storage\n   • Cost impact: +$45\n   • Likely cause: Backup retention policy change\n\n2. **Compute Overage** (March 22)\n   • 12 hours of unplanned compute usage\n   • Cost impact: +$28\n   • Likely cause: Forgotten dev environment\n\n3. **Data Transfer** (March 25-27)\n   • 2TB outbound data transfer\n   • Cost impact: +$180\n   • Likely cause: Large dataset export' },
+        { role: 'user', content: 'How can I prevent these?' },
+        { role: 'assistant', content: 'Prevention strategies:\n\n1. **Storage Management**\n   • Set up lifecycle policies for automated cleanup\n   • Enable storage alerts at 80% threshold\n\n2. **Compute Optimization**\n   • Implement auto-shutdown for dev environments\n   • Use scheduled scaling policies\n\n3. **Data Transfer Control**\n   • Enable CDN caching to reduce origin requests\n   • Set up budget alerts for data transfer\n   • Review data export processes\n\nWould you like me to help implement any of these?' }
+      ]
+    }
+  ];
 
   // Collapse side nav when navigating to Create page
   React.useEffect(() => {
@@ -73,6 +122,13 @@ const AppContent: React.FC = () => {
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
+  // Function to open AI panel with a specific chat
+  const handleOpenChat = (chatId: string) => {
+    setSelectedChatId(chatId);
+    setActiveTab(0); // Switch to Chat tab
+    setIsAiPanelOpen(true); // Open the panel
+  };
 
   return (
     <Theme theme={isDarkMode ? "g100" : "g10"}>
@@ -200,133 +256,194 @@ const AppContent: React.FC = () => {
             </SideNav>
 
             {/* AI Side Panel */}
-            <div className={`ai-side-panel ${isAiPanelOpen ? 'ai-side-panel--open' : ''}`}>
-              <div className="ai-panel-header">
-                <div className="ai-panel-header-left">
-                  <Button
-                    kind="ghost"
-                    size="sm"
-                    renderIcon={Menu}
-                    iconDescription="Menu"
-                    hasIconOnly
-                  />
+            <Theme theme="g10" className={`ai-side-panel ${isAiPanelOpen ? 'ai-side-panel--open' : ''}`}>
+              <div className="ai-side-panel-inner">
+                <div className="ai-panel-header">
                   <h2 className="ai-panel-title">IBM Cloud AI</h2>
+                  <div className="ai-panel-header-actions">
+                    <Button
+                      kind="ghost"
+                      size="sm"
+                      renderIcon={Add}
+                      iconDescription="New chat"
+                      hasIconOnly
+                      onClick={() => {
+                        setSelectedChatId(null);
+                        setActiveTab(0);
+                      }}
+                    />
+                    <Button
+                      kind="ghost"
+                      size="sm"
+                      renderIcon={Close}
+                      iconDescription="Close"
+                      hasIconOnly
+                      onClick={() => setIsAiPanelOpen(false)}
+                    />
+                  </div>
                 </div>
-                <Button
-                  kind="ghost"
-                  size="sm"
-                  renderIcon={Close}
-                  iconDescription="Close"
-                  hasIconOnly
-                  onClick={() => setIsAiPanelOpen(false)}
-                />
-              </div>
 
-              <Tabs>
-                <TabList aria-label="AI Panel tabs" contained>
-                  <Tab renderIcon={Chat}>Chat</Tab>
-                  <Tab renderIcon={Calendar}>Calendar</Tab>
-                  <Tab renderIcon={ChartLine}>Chart</Tab>
-                  <Tab renderIcon={Help}>Help</Tab>
-                </TabList>
-                <TabPanels>
-                  <TabPanel>
-                    <div className="ai-chat-content">
-                      <div className="ai-message">
-                        <div className="ai-message-avatar">
-                          <AiLaunch size={20} />
-                        </div>
-                        <div className="ai-message-content">
-                          <div className="ai-message-header">
-                            <span className="ai-message-sender">IBM Cloud AI</span>
-                            <span className="ai-message-time">12:46</span>
+                <Tabs selectedIndex={activeTab} onChange={(e) => {
+                  setActiveTab(e.selectedIndex);
+                  if (e.selectedIndex === 1) {
+                    // Clear selected chat when switching to History tab
+                    setSelectedChatId(null);
+                  }
+                }}>
+                  <TabList aria-label="AI Panel tabs" contained>
+                    <Tab>Chat</Tab>
+                    <Tab>History</Tab>
+                  </TabList>
+                  <TabPanels>
+                    <TabPanel>
+                      <div className="ai-chat-content">
+                        {selectedChatId ? (
+                          <>
+                            <div className="ai-chat-messages-container">
+                              <div className="ai-chat-history">
+                                {chatHistories.find(chat => chat.id === selectedChatId)?.messages.map((message, index) => (
+                                  <div key={index} className={`ai-message ai-message--${message.role}`}>
+                                    <div className="ai-message-role">{message.role === 'user' ? 'You' : 'IBM Cloud AI'}</div>
+                                    <div className="ai-message-content">{message.content}</div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                            <div className="ai-chat-input-sticky">
+                              <div className="ai-chat-input-wrapper">
+                                <TextArea
+                                  id="ai-panel-chat"
+                                  placeholder="Continue the conversation..."
+                                  labelText=""
+                                  hideLabel
+                                  rows={3}
+                                />
+                                <div className="ai-chat-input-actions">
+                                  <div className="ai-chat-input-actions-left">
+                                    <Button
+                                      kind="ghost"
+                                      size="sm"
+                                      renderIcon={Upload}
+                                      iconDescription="Upload"
+                                      hasIconOnly
+                                    />
+                                    <Button
+                                      kind="ghost"
+                                      size="sm"
+                                      renderIcon={At}
+                                      iconDescription="Mention"
+                                      hasIconOnly
+                                    />
+                                  </div>
+                                  <div className="ai-chat-input-actions-right">
+                                    <Button
+                                      kind="ghost"
+                                      size="sm"
+                                      renderIcon={Microphone}
+                                      iconDescription="Voice input"
+                                      hasIconOnly
+                                    />
+                                    <Button
+                                      kind="ghost"
+                                      size="sm"
+                                      renderIcon={SendAlt}
+                                      iconDescription="Send"
+                                      hasIconOnly
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="ai-welcome-section">
+                            <h3 className="ai-welcome-title">Run an AI task with your IBM Cloud resources.</h3>
+                            
+                            <div className="ai-chat-input-wrapper">
+                              <TextArea
+                                id="ai-panel-chat"
+                                placeholder="Chat with IBM Cloud AI"
+                                labelText=""
+                                hideLabel
+                                rows={3}
+                              />
+                              <div className="ai-chat-input-actions">
+                                <div className="ai-chat-input-actions-left">
+                                  <Button
+                                    kind="ghost"
+                                    size="sm"
+                                    renderIcon={Upload}
+                                    iconDescription="Upload"
+                                    hasIconOnly
+                                  />
+                                  <Button
+                                    kind="ghost"
+                                    size="sm"
+                                    renderIcon={At}
+                                    iconDescription="Mention"
+                                    hasIconOnly
+                                  />
+                                </div>
+                                <div className="ai-chat-input-actions-right">
+                                  <Button
+                                    kind="ghost"
+                                    size="sm"
+                                    renderIcon={Microphone}
+                                    iconDescription="Voice input"
+                                    hasIconOnly
+                                  />
+                                  <Button
+                                    kind="ghost"
+                                    size="sm"
+                                    renderIcon={SendAlt}
+                                    iconDescription="Send"
+                                    hasIconOnly
+                                  />
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="ai-quick-actions">
+                              <div className="ai-quick-actions-header">
+                                <span>Quick actions</span>
+                                <span className="ai-badge">AI</span>
+                              </div>
+                              <div className="ai-quick-actions-list">
+                                <Tag type="outline">How's my account doing?</Tag>
+                                <Tag type="outline">What resources require my attention?</Tag>
+                                <Tag type="outline">Estimate my monthly costs</Tag>
+                                <Tag type="outline">Review recent actions</Tag>
+                                <Tag type="outline">Teach me something new on IBM Cloud</Tag>
+                              </div>
+                            </div>
                           </div>
-                          <div className="ai-message-text">
-                            <p>Hi! I'm Finn, an AI-powered agent for IBM Cloud.</p>
-                            <p>I can answer questions, help you understand your infrastructure, or even help you make new things.</p>
-                            <p>What can I do for you today?</p>
-                          </div>
-                          <div className="ai-message-actions">
-                            <Button
-                              kind="ghost"
-                              size="sm"
-                              renderIcon={ThumbsUp}
-                              iconDescription="Like"
-                              hasIconOnly
-                            />
-                            <Button
-                              kind="ghost"
-                              size="sm"
-                              renderIcon={ThumbsDown}
-                              iconDescription="Dislike"
-                              hasIconOnly
-                            />
-                            <Button
-                              kind="ghost"
-                              size="sm"
-                              renderIcon={Renew}
-                              iconDescription="Regenerate"
-                              hasIconOnly
-                            />
-                          </div>
-                        </div>
+                        )}
                       </div>
-                    </div>
-                    <div className="ai-input-container">
-                      <Button
-                        kind="ghost"
-                        size="sm"
-                        renderIcon={Menu}
-                        iconDescription="Menu"
-                        hasIconOnly
-                      />
-                      <TextInput
-                        id="ai-input"
-                        labelText=""
-                        placeholder="Type something..."
-                        size="lg"
-                      />
-                      <Button
-                        kind="ghost"
-                        size="sm"
-                        renderIcon={Microphone}
-                        iconDescription="Voice input"
-                        hasIconOnly
-                      />
-                      <Button
-                        kind="ghost"
-                        size="sm"
-                        renderIcon={SendAlt}
-                        iconDescription="Send"
-                        hasIconOnly
-                      />
-                      <Button
-                        kind="ghost"
-                        size="sm"
-                        renderIcon={OverflowMenuHorizontal}
-                        iconDescription="More options"
-                        hasIconOnly
-                      />
-                    </div>
-                  </TabPanel>
-                  <TabPanel>
-                    <div className="ai-panel-content">
-                      <p>Calendar content coming soon...</p>
-                    </div>
-                  </TabPanel>
-                  <TabPanel>
-                    <div className="ai-panel-content">
-                      <p>Chart content coming soon...</p>
-                    </div>
-                  </TabPanel>
-                  <TabPanel>
-                    <div className="ai-panel-content">
-                      <p>Help content coming soon...</p>
-                    </div>
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </div>
+                    </TabPanel>
+                    <TabPanel>
+                      <div className="ai-panel-content">
+                        <StructuredListWrapper>
+                          <StructuredListBody>
+                            {chatHistories.map((chat) => (
+                              <StructuredListRow
+                                key={chat.id}
+                                onClick={() => {
+                                  setSelectedChatId(chat.id);
+                                  setActiveTab(0);
+                                }}
+                                style={{ cursor: 'pointer' }}
+                              >
+                                <StructuredListCell>{chat.title}</StructuredListCell>
+                              </StructuredListRow>
+                            ))}
+                          </StructuredListBody>
+                        </StructuredListWrapper>
+                      </div>
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+              </div>
+            </Theme>
 
             <Routes>
               <Route
@@ -339,6 +456,8 @@ const AppContent: React.FC = () => {
                     setAccountId={setAccountId}
                     accountName={accountName}
                     setAccountName={setAccountName}
+                    onOpenAiPanel={() => setIsAiPanelOpen(true)}
+                    onOpenChat={handleOpenChat}
                   />
                 }
               />

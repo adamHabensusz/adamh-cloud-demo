@@ -42,6 +42,7 @@ import {
   Settings,
   Renew,
   Pin,
+  AiLaunch,
 } from '@carbon/icons-react';
 import ChatField from './components/ChatField';
 
@@ -62,6 +63,8 @@ interface HomeProps {
   setAccountId: (id: string) => void;
   accountName: string;
   setAccountName: (name: string) => void;
+  onOpenAiPanel?: () => void;
+  onOpenChat?: (chatId: string) => void;
 }
 
 const Home: React.FC<HomeProps> = ({
@@ -71,6 +74,8 @@ const Home: React.FC<HomeProps> = ({
   setAccountId,
   accountName,
   setAccountName,
+  onOpenAiPanel,
+  onOpenChat,
 }) => {
   const navigate = useNavigate();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -358,7 +363,7 @@ const Home: React.FC<HomeProps> = ({
               <Column lg={8} md={8} sm={4}>
                 <div className="ai-search-container">
                   <ChatField
-                    placeholder="Chat with IBM Cloud AI"
+                    placeholder="Ask anything"
                     labelText="AI Search"
                     id="ai-search"
                     onChange={() => {}}
@@ -632,17 +637,17 @@ const Home: React.FC<HomeProps> = ({
                     <Button
                       kind="ghost"
                       size="lg"
+                      renderIcon={Add}
+                      onClick={() => navigate('/catalog')}
+                    >
+                      Create
+                    </Button>
+                    <Button
+                      kind="ghost"
+                      size="lg"
                       renderIcon={OverflowMenuVertical}
                       iconDescription="View all"
                       hasIconOnly
-                    />
-                    <Button
-                      kind="primary"
-                      size="lg"
-                      renderIcon={Add}
-                      iconDescription="Add"
-                      hasIconOnly
-                      onClick={() => navigate('/catalog')}
                     />
                   </div>
                 </div>
@@ -679,23 +684,42 @@ const Home: React.FC<HomeProps> = ({
               <div className="recent-chats">
                 <div className="section-header">
                   <h2 className="section-title">Recent chats</h2>
-                  <Button
-                    kind="ghost"
-                    size="lg"
-                    renderIcon={OverflowMenuVertical}
-                    iconDescription="More options"
-                    hasIconOnly
-                  />
+                  <div className="section-header-actions">
+                    <Button
+                      kind="ghost"
+                      size="lg"
+                      renderIcon={AiLaunch}
+                      onClick={onOpenAiPanel}
+                    >
+                      New chat
+                    </Button>
+                    <Button
+                      kind="ghost"
+                      size="lg"
+                      renderIcon={OverflowMenuVertical}
+                      iconDescription="More options"
+                      hasIconOnly
+                    />
+                  </div>
                 </div>
                 <StructuredListWrapper>
                   <StructuredListBody>
-                    <StructuredListRow>
+                    <StructuredListRow
+                      onClick={() => onOpenChat?.('chat-1')}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <StructuredListCell>Compare resource distribution</StructuredListCell>
                     </StructuredListRow>
-                    <StructuredListRow>
+                    <StructuredListRow
+                      onClick={() => onOpenChat?.('chat-2')}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <StructuredListCell>Timeline of performance degradation</StructuredListCell>
                     </StructuredListRow>
-                    <StructuredListRow>
+                    <StructuredListRow
+                      onClick={() => onOpenChat?.('chat-3')}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <StructuredListCell>Generate a billing anomaly report</StructuredListCell>
                     </StructuredListRow>
                   </StructuredListBody>

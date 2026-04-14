@@ -13,6 +13,7 @@ interface ChatFieldProps {
   onVoiceInput?: () => void;
   value?: string;
   size?: 'sm' | 'md' | 'lg';
+  showVoiceButton?: boolean;
 }
 
 /**
@@ -46,6 +47,7 @@ const ChatField: React.FC<ChatFieldProps> = ({
   onVoiceInput,
   value,
   size = 'lg',
+  showVoiceButton = true,
 }) => {
   return (
     <div className="chat-field-container">
@@ -60,14 +62,16 @@ const ChatField: React.FC<ChatFieldProps> = ({
         value={value}
       />
       <div className="chat-field-actions">
-        <Button
-          kind="ghost"
-          size={size}
-          renderIcon={Microphone}
-          iconDescription="Voice input"
-          hasIconOnly
-          onClick={onVoiceInput}
-        />
+        {showVoiceButton && (
+          <Button
+            kind="ghost"
+            size={size}
+            renderIcon={Microphone}
+            iconDescription="Voice input"
+            hasIconOnly
+            onClick={onVoiceInput}
+          />
+        )}
         <Button
           kind="ghost"
           size={size}

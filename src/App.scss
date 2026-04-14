@@ -962,18 +962,23 @@ body {
   right: 0;
   width: 320px;
   height: calc(100vh - 48px);
-  background-color: $layer-01;
-  border-left: 1px solid $border-subtle-01;
   transform: translateX(100%);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 8000;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
 
   &.ai-side-panel--open {
     transform: translateX(0);
   }
+}
+
+.ai-side-panel-inner {
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  border-left: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .ai-panel-header {
@@ -982,137 +987,244 @@ body {
   align-items: center;
   padding: 0 $spacing-05;
   height: 48px;
-  border-bottom: 1px solid $border-subtle-01;
+  border-bottom: 1px solid #e0e0e0;
   flex-shrink: 0;
-}
-
-.ai-panel-header-left {
-  display: flex;
-  align-items: center;
-  gap: $spacing-03;
+  background-color: #ffffff;
 }
 
 .ai-panel-title {
   font-size: 0.875rem;
   font-weight: 600;
   margin: 0;
-  color: $text-primary;
+  color: #161616;
+}
+
+.ai-panel-header-actions {
+  display: flex;
+  gap: 0;
+  align-items: center;
 }
 
 // Tabs styling
-.ai-side-panel .cds--tabs {
+.ai-side-panel-inner .cds--tabs {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.ai-side-panel .cds--tab-content {
+.ai-side-panel-inner .cds--tab-content {
   flex: 1;
-  overflow-y: auto;
+  overflow: hidden;
   padding: 0;
+  background-color: #ffffff;
 }
 
-.ai-side-panel .cds--tabs--contained .cds--tabs__nav {
-  background-color: $layer-01;
-  border-bottom: 1px solid $border-subtle-01;
+.ai-side-panel-inner .cds--tab-content[hidden] {
+  display: none !important;
+}
+
+.ai-side-panel-inner .cds--tab-content:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+}
+
+.ai-side-panel-inner .cds--tabs--contained .cds--tabs__nav {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 // Chat content
 .ai-chat-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  overflow: hidden;
+  height: 100%;
+  padding: 16px;
+}
+
+.ai-chat-messages-container {
+  flex: 1;
   overflow-y: auto;
+  min-height: 0;
+}
+
+.ai-welcome-section {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-06;
+}
+
+.ai-welcome-title {
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #161616;
+  margin: 0;
+}
+
+.ai-chat-input-wrapper {
+  position: relative;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
   padding: $spacing-05;
-}
+  background-color: #f4f4f4;
 
-.ai-message {
-  display: flex;
-  gap: $spacing-04;
-  margin-bottom: $spacing-05;
-}
+  .cds--text-area {
+    border: none;
+    outline: none;
+    resize: none;
+    min-height: 80px;
+    padding: 0;
+    background-color: transparent;
+    
+    &:focus {
+      outline: none;
+      background-color: #ffffff;
+    }
+  }
 
-.ai-message-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #4589ff 0%, #be95ff 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  .cds--text-area__wrapper {
+    border: none;
+    background-color: transparent;
+  }
 
-  svg {
-    fill: #ffffff;
-    color: #ffffff;
+  .cds--label {
+    display: none;
   }
 }
 
-.ai-message-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-03;
-}
-
-.ai-message-header {
+.ai-chat-input-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: $spacing-03;
+  padding-top: $spacing-03;
+  border-top: 1px solid #e0e0e0;
 }
 
-.ai-message-sender {
+.ai-chat-input-actions-left,
+.ai-chat-input-actions-right {
+  display: flex;
+  gap: $spacing-02;
+  align-items: center;
+}
+
+.ai-quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-04;
+}
+
+.ai-quick-actions-header {
+  display: flex;
+  align-items: center;
+  gap: $spacing-03;
   font-size: 0.875rem;
   font-weight: 600;
-  color: $text-primary;
+  color: #161616;
 }
 
-.ai-message-time {
+.ai-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 $spacing-03;
+  height: 18px;
+  background-color: #0f62fe;
+  color: #ffffff;
   font-size: 0.75rem;
-  color: $text-secondary;
+  font-weight: 600;
+  border-radius: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.16px;
 }
 
-.ai-message-text {
-  font-size: 0.875rem;
-  line-height: 1.43;
-  color: $text-primary;
+.ai-quick-actions-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-03;
 
-  p {
-    margin: 0 0 $spacing-04;
-
-    &:last-child {
-      margin-bottom: 0;
+  .cds--tag {
+    cursor: pointer;
+    transition: all 0.15s ease;
+    
+    &:hover {
+      background-color: #e8e8e8;
     }
   }
 }
 
-.ai-message-actions {
+// Chat history display
+.ai-chat-history {
   display: flex;
-  gap: 0;
-  margin-top: $spacing-03;
+  flex-direction: column;
+  gap: $spacing-05;
 }
 
-// Input container
-.ai-input-container {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  padding: $spacing-05;
-  border-top: 1px solid $border-subtle-01;
-  background-color: $layer-01;
+.ai-chat-input-sticky {
   flex-shrink: 0;
+  background-color: #ffffff;
+  border-top: 1px solid #e0e0e0;
+  padding: 16px;
+}
 
-  .cds--text-input-wrapper {
-    flex: 1;
+.ai-message {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-03;
+  padding: $spacing-04;
+  border-radius: 8px;
+  
+  &--user {
+    background-color: #f4f4f4;
+    margin-left: $spacing-05;
   }
+  
+  &--assistant {
+    background-color: #e8f4ff;
+    margin-right: $spacing-05;
+  }
+}
 
-  .cds--text-input {
-    border: none;
-    background-color: transparent;
-  }
+.ai-message-role {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #525252;
+  text-transform: uppercase;
+  letter-spacing: 0.32px;
+}
+
+.ai-message-content {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #161616;
+  white-space: pre-wrap;
 }
 
 // Panel content for other tabs
 .ai-panel-content {
   padding: $spacing-05;
+  background-color: #ffffff;
+  
+  .cds--structured-list-row {
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    
+    &:hover {
+      background-color: #e8e8e8;
+    }
+  }
+}
+
+// Recent chats hover effect on homepage
+.cds--structured-list-row {
+  transition: background-color 0.15s ease;
+  
+  &[style*="cursor: pointer"]:hover {
+    background-color: #e8e8e8;
+  }
 }
 
 // Adjust content width when AI panel is open
