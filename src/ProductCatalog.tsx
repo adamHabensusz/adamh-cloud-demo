@@ -31,6 +31,7 @@ const ProductCatalog: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedView, setSelectedView] = useState(0);
   const [productCounts, setProductCounts] = useState<{[key: string]: number}>({});
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,6 +41,22 @@ const ProductCatalog: React.FC = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    // Detect dark mode by checking if g100 class exists on body or root
+    const checkDarkMode = () => {
+      const hasG100 = document.querySelector('.cds--g100') !== null;
+      setIsDarkMode(hasG100);
+    };
+    
+    checkDarkMode();
+    
+    // Use MutationObserver to detect theme changes
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.body, { attributes: true, subtree: true, attributeFilter: ['class'] });
+    
+    return () => observer.disconnect();
   }, []);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,8 +79,7 @@ const ProductCatalog: React.FC = () => {
     <Content id="main-content">
       <div className="product-catalog-page">
         {/* Page Header */}
-        <Theme theme="white">
-          <div className={`page-header ${isScrolled ? 'scrolled' : ''}`}>
+        <div className={`page-header ${isScrolled ? 'scrolled' : ''}`}>
             <div className="page-header-content">
             <Grid fullWidth narrow>
               <Column lg={16} md={8} sm={4}>
@@ -81,15 +97,17 @@ const ProductCatalog: React.FC = () => {
                 </div>
                 
                 <div className="catalog-chat-field">
-                  <ChatField
-                    placeholder="Search for products or tell us your use case"
-                    labelText="Product Catalog Search"
-                    id="catalog-ai-chat"
-                    onChange={handleSearchChange}
-                    onKeyDown={() => {}}
-                    onSend={() => {}}
-                    onVoiceInput={() => {}}
-                  />
+                  <Theme theme={isDarkMode ? "g90" : "white"}>
+                    <ChatField
+                      placeholder="Search for products or tell us your use case"
+                      labelText="Product Catalog Search"
+                      id="catalog-ai-chat"
+                      onChange={handleSearchChange}
+                      onKeyDown={() => {}}
+                      onSend={() => {}}
+                      onVoiceInput={() => {}}
+                    />
+                  </Theme>
                 </div>
                 
                 {/* Tabs */}
@@ -113,8 +131,7 @@ const ProductCatalog: React.FC = () => {
               </Column>
             </Grid>
             </div>
-          </div>
-        </Theme>
+        </div>
 
         {/* Page Content */}
         <div className="page-content">

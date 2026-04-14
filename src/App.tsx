@@ -31,6 +31,7 @@ import {
 import Home from './Home';
 import ProductCatalog from './ProductCatalog';
 import Create from './Create';
+import Activities from './Activities';
 import './App.scss';
 
 const AppContent: React.FC = () => {
@@ -143,9 +144,11 @@ const AppContent: React.FC = () => {
                     Product catalog
                   </SideNavLink>
                 </RouterLink>
-                <SideNavLink renderIcon={Activity} href="#">
-                  Activities
-                </SideNavLink>
+                <RouterLink to="/activities" style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <SideNavLink renderIcon={Activity} isActive={location.pathname === '/activities'}>
+                    Activities
+                  </SideNavLink>
+                </RouterLink>
                 <div style={{
                   marginTop: 'auto',
                   padding: '1rem',
@@ -180,6 +183,7 @@ const AppContent: React.FC = () => {
                 }
               />
               <Route path="/catalog" element={<ProductCatalog />} />
+              <Route path="/activities" element={<Activities />} />
               <Route path="/create" element={<Create />} />
             </Routes>
           </>

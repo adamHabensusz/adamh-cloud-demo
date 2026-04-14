@@ -70,6 +70,7 @@ const AllProductsView: React.FC = () => {
         { name: 'Developer tools', count: 34, checked: false },
         { name: 'Migration', count: 5, checked: false },
         { name: 'Industry solutions', count: 3, checked: false },
+        { name: 'Test', count: 1, checked: false },
       ]
     }
   ];
@@ -414,7 +415,7 @@ const AllProductsView: React.FC = () => {
       </Column>
       
       {/* Filters - 2 columns */}
-      <Column lg={2} md={2} sm={4}>
+      <Column lg={3} md={2} sm={4} className="filters-column">
         <Theme theme="g10">
           <aside className="filters-sidebar">
             {filterGroups.map((group, groupIndex) => (
@@ -434,11 +435,8 @@ const AllProductsView: React.FC = () => {
           </aside>
         </Theme>
       </Column>
-
-      {/* Gap - 1 column */}
-      <Column lg={1} md={0} sm={0} />
       
-      {/* Products - 13 columns */}
+      {/* Products - remaining columns */}
       <Column lg={13} md={6} sm={4}>
         <Theme theme="g10">
           <div className="products-main">

@@ -22,12 +22,27 @@
   padding-top: 32px;
 }
 
+.filters-column {
+  align-self: start;
+}
+
 .filters-sidebar {
+  position: sticky;
+  top: calc(48px + 11rem);
+  height: fit-content;
   display: flex;
   flex-direction: column;
   gap: $spacing-03;
   padding-top: 32px;
 }
+
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-03;
+}
+
 
 .selected-filter {
   display: flex;
@@ -56,11 +71,6 @@
   }
 }
 
-.filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-03;
-}
 
 .filter-item {
   .cds--checkbox-label {

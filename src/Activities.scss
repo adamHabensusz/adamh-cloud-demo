@@ -1,0 +1,149 @@
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/theme' as *;
+@use '@carbon/react/scss/colors' as *;
+
+.activities-page {
+  min-height: 100vh;
+  background-color: $background;
+
+  .page-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid $border-subtle-01;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: all 0.3s ease;
+
+    .page-header-content {
+      padding: $spacing-06 0 0;
+    }
+
+    .header-top-content {
+      margin-bottom: $spacing-05;
+    }
+
+    .page-title-section {
+      margin-top: $spacing-05;
+    }
+
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 400;
+      line-height: 1.29;
+      letter-spacing: 0;
+      margin: 0;
+      color: $text-primary;
+    }
+
+    .activities-tabs {
+      margin-top: $spacing-06;
+
+      .cds--tabs {
+        border-bottom: none;
+      }
+
+      .cds--tabs__nav {
+        border-bottom: 1px solid $border-subtle-01;
+      }
+    }
+  }
+
+  .page-content {
+    padding: $spacing-06 0;
+    max-width: 1584px;
+    margin: 0 auto;
+  }
+
+  .activities-table-container {
+    background-color: $layer-01;
+
+    .cds--data-table {
+      background-color: $layer-01;
+    }
+
+    .cds--table-toolbar {
+      background-color: $layer-01;
+      border-bottom: 1px solid $border-subtle-01;
+    }
+
+    .cds--toolbar-search-container-expandable {
+      flex: 1;
+      max-width: 100%;
+    }
+
+    .cds--search-input {
+      background-color: $field-01;
+    }
+
+    .cds--data-table thead {
+      background-color: $layer-accent-01;
+    }
+
+    .cds--data-table th {
+      background-color: $layer-accent-01;
+      color: $text-primary;
+      font-weight: 600;
+      font-size: 0.875rem;
+      padding: $spacing-05;
+    }
+
+    .cds--data-table td {
+      padding: $spacing-05;
+      color: $text-primary;
+      font-size: 0.875rem;
+    }
+
+    .cds--data-table tbody tr {
+      border-bottom: 1px solid $border-subtle-01;
+
+      &:hover {
+        background-color: $layer-hover-01;
+      }
+    }
+
+    .severity-cell {
+      display: flex;
+      align-items: center;
+      gap: $spacing-03;
+
+      .severity-icon {
+        flex-shrink: 0;
+
+        &.severity-failed {
+          color: $support-error;
+        }
+
+        &.severity-warning {
+          color: $support-warning;
+        }
+
+        &.severity-information {
+          color: $support-info;
+        }
+      }
+    }
+
+    .cds--link {
+      color: $link-primary;
+      text-decoration: none;
+
+      &:hover {
+        color: $link-primary-hover;
+        text-decoration: underline;
+      }
+    }
+
+    .cds--pagination {
+      background-color: $layer-01;
+      border-top: 1px solid $border-subtle-01;
+    }
+  }
+}
+
+
+// Made with Bob
+
+// Dark mode - gray-90 background for page header in g100 theme
+.cds--g100 .activities-page .page-header {
+  background-color: #262626;
+}

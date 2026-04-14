@@ -97,6 +97,15 @@ body {
   }
 }
 
+// Dark mode - use blue-100 for AI button in g100 theme
+.cds--g100 .ai-button {
+  background: linear-gradient(to bottom, #393939, #001141);
+  
+  &:hover {
+    background: linear-gradient(to bottom, #474747, #001d6c);
+  }
+}
+
 // Header search positioning
 .header-search {
   max-width: 400px;
@@ -128,49 +137,56 @@ body {
 // Side navigation custom styles - Carbon Global Navigation
 .cds--side-nav {
   background-color: $layer-01;
-  transition: width 0.5s cubic-bezier(0.2, 0, 0.38, 0.9) !important;
-  will-change: width;
   display: block !important;
   visibility: visible !important;
-  overflow: visible !important;
+  overflow: hidden !important;
   position: fixed !important;
   left: 0 !important;
   top: 48px !important;
   height: calc(100vh - 48px) !important;
   transform: none !important;
   border-right: 1px solid $border-subtle !important;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  will-change: width;
   
   &:not(.cds--side-nav--expanded) {
     width: 48px !important;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
     
     .cds--side-nav__link-text {
       opacity: 0;
       width: 0;
       overflow: hidden;
       white-space: nowrap;
+      transition: opacity 0.4s cubic-bezier(0.4, 0, 1, 1), width 0.4s cubic-bezier(0.4, 0, 1, 1);
     }
     
     .cds--side-nav__link {
       justify-content: center;
       padding-left: 0;
       padding-right: 0;
+      transition: padding 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     .cds--side-nav__icon {
       margin-right: 0;
+      transition: margin 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
   }
   
   &.cds--side-nav--expanded {
     width: 256px !important;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
     
     .cds--side-nav__link-text {
       opacity: 1;
       width: auto;
+      transition: opacity 0.5s cubic-bezier(0, 0, 0.2, 1) 0.3s, width 0.5s cubic-bezier(0, 0, 0.2, 1) 0.3s;
     }
     
     .cds--side-nav__icon {
       margin-right: 1rem;
+      transition: margin 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
   }
 }
@@ -184,7 +200,7 @@ body {
 
 // Ensure overlay animates too
 .cds--side-nav__overlay {
-  transition: opacity 0.5s cubic-bezier(0.2, 0, 0.38, 0.9), visibility 0s 0.5s !important;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s 0.8s !important;
   
   &:not(.cds--side-nav__overlay-active) {
     opacity: 0 !important;
@@ -194,7 +210,7 @@ body {
   &.cds--side-nav__overlay-active {
     opacity: 1 !important;
     visibility: visible !important;
-    transition: opacity 0.5s cubic-bezier(0.2, 0, 0.38, 0.9) !important;
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
 }
 
@@ -273,6 +289,11 @@ body {
   right: 50%;
   margin-left: -50vw;
   margin-right: -50vw;
+}
+
+// Dark mode - use blue-100 for g100 theme
+.cds--g100 .welcome-section {
+  background: linear-gradient(to bottom, $background, #001141);
 }
 
 .welcome-content,
@@ -374,6 +395,11 @@ body {
   gap: $spacing-03;
   padding-right: $spacing-05;
   border-right: 1px solid #A6C8FF;
+}
+
+// Dark mode - use blue-80 for divider lines in g100 theme
+.cds--g100 .info-card {
+  border-right-color: #002d9c;
 }
 
 // Remove border from the last card (Learning)
@@ -627,7 +653,7 @@ body {
   max-width: calc(100% - 48px);
   overflow-x: hidden;
   background-color: $background;
-  transition: margin-left 0.5s cubic-bezier(0.2, 0, 0.38, 0.9), width 0.5s cubic-bezier(0.2, 0, 0.38, 0.9);
+  transition: margin-left 0.8s cubic-bezier(0.4, 0, 0.2, 1), width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 // Adjust content when side nav is expanded

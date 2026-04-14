@@ -107,11 +107,11 @@ const Create: React.FC = () => {
         </Theme>
 
         <Theme theme="g10">
-          <Grid fullWidth narrow>
-            <Column lg={{ span: 12, offset: 2 }} md={8} sm={4}>
-              <div className="page-content">
+          <div className="page-content">
+            <Grid fullWidth narrow>
+              <Column lg={16} md={8} sm={4}>
                 <Grid fullWidth narrow>
-                  <Column lg={7} md={6} sm={4}>
+                  <Column lg={12} md={6} sm={4}>
                     <div className="create-form">
                       <Tile className="form-section">
                         <h3 className="section-title">Instance details</h3>
@@ -268,9 +268,9 @@ const Create: React.FC = () => {
                     </div>
                   </Column>
                 </Grid>
-              </div>
-            </Column>
-          </Grid>
+              </Column>
+            </Grid>
+          </div>
         </Theme>
       </div>
 
