@@ -81,8 +81,9 @@ const Home: React.FC<HomeProps> = ({
     <Content id="main-content">
       <div className="dashboard-container">
         {/* Welcome Section */}
-        <div className="welcome-section">
-          <div className="welcome-content">
+        <div className="welcome-section-wrapper">
+          <div className="welcome-section">
+            <div className="welcome-content">
             <Grid fullWidth narrow>
               <Column lg={16} md={8} sm={4}>
                 <div className="welcome-header-new">
@@ -185,6 +186,7 @@ const Home: React.FC<HomeProps> = ({
             </Grid>
           </div>
         </div>
+      </div>
 
         {/* Page Content Container */}
         <div className="page-content">

@@ -273,27 +273,19 @@ body {
 
 // Dashboard container
 .dashboard-container {
-  max-width: 1584px;
-  margin: 0 auto;
   padding: 0;
 }
 
 // Welcome section - full width with gradient
 .welcome-section {
-  margin-bottom: $spacing-07;
   background: linear-gradient(to bottom, $background, #e5edfe);
-  padding: 4rem 0 $spacing-06;
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
+  padding: 4rem 0 2rem;
+  width: 100%;
 }
 
-// Dark mode - use blue-100 for g100 theme
+// Dark mode - use blue-90 for g100 theme
 .cds--g100 .welcome-section {
-  background: linear-gradient(to bottom, $background, #001141);
+  background: linear-gradient(to bottom, $background, #001d6c);
 }
 
 .welcome-content,
@@ -304,6 +296,7 @@ body {
 }
 
 .page-content {
+  padding-top: 2rem;
   padding-bottom: 8rem;
 }
 

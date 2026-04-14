@@ -18,6 +18,7 @@ import {
   Home as HomeIcon,
   Catalog,
   Activity,
+  List,
   ChevronDown,
   ChevronRight,
   ChevronLeft,
@@ -32,11 +33,12 @@ import Home from './Home';
 import ProductCatalog from './ProductCatalog';
 import Create from './Create';
 import Activities from './Activities';
+import ResourceList from './ResourceList';
 import './App.scss';
 
 const AppContent: React.FC = () => {
   const location = useLocation();
-  const [isSideNavOpen, setIsSideNavOpen] = useState(location.pathname !== '/create');
+  const [isSideNavOpen, setIsSideNavOpen] = useState(false);
   const [userName, setUserName] = useState('Adam Habensusz');
   const [accountId, setAccountId] = useState('124849');
   const [accountName, setAccountName] = useState("Adam Habensusz's Account");
@@ -149,6 +151,11 @@ const AppContent: React.FC = () => {
                     Activities
                   </SideNavLink>
                 </RouterLink>
+                <RouterLink to="/resources" style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <SideNavLink renderIcon={List} isActive={location.pathname === '/resources'}>
+                    Resource list
+                  </SideNavLink>
+                </RouterLink>
                 <div style={{
                   marginTop: 'auto',
                   padding: '1rem',
@@ -184,6 +191,7 @@ const AppContent: React.FC = () => {
               />
               <Route path="/catalog" element={<ProductCatalog />} />
               <Route path="/activities" element={<Activities />} />
+              <Route path="/resources" element={<ResourceList />} />
               <Route path="/create" element={<Create />} />
             </Routes>
           </>
