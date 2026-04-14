@@ -90,19 +90,35 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(to bottom, #ffffff, #e5edfe);
+  // Blue to purple gradient using IBM colors
+  // Blue-60 (#0f62fe) to Purple-60 (#8a3ffc)
+  background: linear-gradient(135deg, #4589ff 0%, #a56eff 100%);
+  
+  svg {
+    fill: #ffffff !important;
+    color: #ffffff !important;
+  }
   
   &:hover {
-    background: linear-gradient(to bottom, #f4f4f4, #d0e0fd);
+    // Lighter blue to purple gradient on hover
+    // Blue-50 (#4589ff) to Purple-50 (#be95ff)
+    background: linear-gradient(135deg, #78a9ff 0%, #be95ff 100%);
   }
 }
 
-// Dark mode - use blue-100 for AI button in g100 theme
+// Dark mode - use lighter blue-purple gradient for g100 theme
 .cds--g100 .ai-button {
-  background: linear-gradient(to bottom, #393939, #001141);
+  // Blue-50 (#4589ff) to Purple-50 (#be95ff)
+  background: linear-gradient(135deg, #4589ff 0%, #be95ff 100%);
+  
+  svg {
+    fill: #ffffff !important;
+    color: #ffffff !important;
+  }
   
   &:hover {
-    background: linear-gradient(to bottom, #474747, #001d6c);
+    // Blue-40 (#78a9ff) to Purple-40 (#d4bbff)
+    background: linear-gradient(135deg, #78a9ff 0%, #d4bbff 100%);
   }
 }
 
@@ -937,6 +953,177 @@ body {
     align-items: center;
     padding-left: $spacing-05;
   }
+}
+
+// AI Side Panel
+.ai-side-panel {
+  position: fixed;
+  top: 48px;
+  right: 0;
+  width: 320px;
+  height: calc(100vh - 48px);
+  background-color: $layer-01;
+  border-left: 1px solid $border-subtle-01;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 8000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  &.ai-side-panel--open {
+    transform: translateX(0);
+  }
+}
+
+.ai-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 $spacing-05;
+  height: 48px;
+  border-bottom: 1px solid $border-subtle-01;
+  flex-shrink: 0;
+}
+
+.ai-panel-header-left {
+  display: flex;
+  align-items: center;
+  gap: $spacing-03;
+}
+
+.ai-panel-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0;
+  color: $text-primary;
+}
+
+// Tabs styling
+.ai-side-panel .cds--tabs {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.ai-side-panel .cds--tab-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.ai-side-panel .cds--tabs--contained .cds--tabs__nav {
+  background-color: $layer-01;
+  border-bottom: 1px solid $border-subtle-01;
+}
+
+// Chat content
+.ai-chat-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: $spacing-05;
+}
+
+.ai-message {
+  display: flex;
+  gap: $spacing-04;
+  margin-bottom: $spacing-05;
+}
+
+.ai-message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4589ff 0%, #be95ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  svg {
+    fill: #ffffff;
+    color: #ffffff;
+  }
+}
+
+.ai-message-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-03;
+}
+
+.ai-message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ai-message-sender {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.ai-message-time {
+  font-size: 0.75rem;
+  color: $text-secondary;
+}
+
+.ai-message-text {
+  font-size: 0.875rem;
+  line-height: 1.43;
+  color: $text-primary;
+
+  p {
+    margin: 0 0 $spacing-04;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.ai-message-actions {
+  display: flex;
+  gap: 0;
+  margin-top: $spacing-03;
+}
+
+// Input container
+.ai-input-container {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: $spacing-05;
+  border-top: 1px solid $border-subtle-01;
+  background-color: $layer-01;
+  flex-shrink: 0;
+
+  .cds--text-input-wrapper {
+    flex: 1;
+  }
+
+  .cds--text-input {
+    border: none;
+    background-color: transparent;
+  }
+}
+
+// Panel content for other tabs
+.ai-panel-content {
+  padding: $spacing-05;
+}
+
+// Adjust content width when AI panel is open
+.ai-side-panel--open ~ .cds--content {
+  width: calc(100% - 0px - 320px);
+  max-width: calc(100% - 0px - 320px);
+}
+
+.cds--side-nav--expanded ~ .ai-side-panel--open ~ .cds--content {
+  width: calc(100% - 256px - 320px);
+  max-width: calc(100% - 256px - 320px);
 }
 
 // Made with Bob

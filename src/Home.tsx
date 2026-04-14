@@ -16,6 +16,8 @@ import {
   Grid,
   Column,
   Tag,
+  Search,
+  IconButton,
 } from '@carbon/react';
 import {
   Cube,
@@ -39,8 +41,19 @@ import {
   Document,
   Settings,
   Renew,
+  Pin,
 } from '@carbon/icons-react';
 import ChatField from './components/ChatField';
+
+interface Resource {
+  id: string;
+  name: string;
+  group: string;
+  location: string;
+  product: string;
+  productIcon: React.ReactNode;
+  status: 'running' | 'failed' | 'warning';
+}
 
 interface HomeProps {
   userName: string;
@@ -65,9 +78,210 @@ const Home: React.FC<HomeProps> = ({
   const [tempAccountId, setTempAccountId] = useState(accountId);
   const [tempAccountName, setTempAccountName] = useState(accountName);
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
+  const [isEditPinnedModalOpen, setIsEditPinnedModalOpen] = useState(false);
+
+  // Resource list data
+  const allResources: Resource[] = [
+    {
+      id: '1',
+      name: 'vsi-prod-web-01',
+      group: 'default',
+      location: 'us-south-1',
+      product: 'Virtual Server Instances',
+      productIcon: <VirtualMachine size={20} />,
+      status: 'running',
+    },
+    {
+      id: '2',
+      name: 'vpc-network-prod',
+      group: 'default',
+      location: 'us-south-2',
+      product: 'Virtual Server Instances',
+      productIcon: <VirtualMachine size={20} />,
+      status: 'failed',
+    },
+    {
+      id: '3',
+      name: 'vsi-dev-sandbox-03',
+      group: 'staging',
+      location: 'eu-de-1',
+      product: 'Virtual Server Instances',
+      productIcon: <VirtualMachine size={20} />,
+      status: 'running',
+    },
+    {
+      id: '4',
+      name: 'cos-media-assets',
+      group: 'production',
+      location: 'us-east-1',
+      product: 'Cloud Object Storage',
+      productIcon: <DataBase size={20} />,
+      status: 'running',
+    },
+    {
+      id: '5',
+      name: 'cos-migration-store',
+      group: 'default',
+      location: 'us-south-3',
+      product: 'Cloud Object Storage',
+      productIcon: <DataBase size={20} />,
+      status: 'failed',
+    },
+    {
+      id: '6',
+      name: 'cos-backup-archive',
+      group: 'default',
+      location: 'us-south-1',
+      product: 'Cloud Object Storage',
+      productIcon: <DataBase size={20} />,
+      status: 'running',
+    },
+    {
+      id: '7',
+      name: 'fn-data-processor',
+      group: 'default',
+      location: 'us-south-3',
+      product: 'Serverless',
+      productIcon: <Code size={20} />,
+      status: 'warning',
+    },
+    {
+      id: '8',
+      name: 'fn-event-handler',
+      group: 'production',
+      location: 'us-south-1',
+      product: 'Serverless',
+      productIcon: <Code size={20} />,
+      status: 'running',
+    },
+    {
+      id: '9',
+      name: 'fn-api-gateway',
+      group: 'default',
+      location: 'eu-de-1',
+      product: 'Serverless',
+      productIcon: <Code size={20} />,
+      status: 'running',
+    },
+    {
+      id: '10',
+      name: 'iks-prod-cluster-01',
+      group: 'default',
+      location: 'us-south-1',
+      product: 'Clusters',
+      productIcon: <Network_3 size={20} />,
+      status: 'running',
+    },
+    {
+      id: '11',
+      name: 'iks-staging-cluster-02',
+      group: 'staging',
+      location: 'eu-de-1',
+      product: 'Clusters',
+      productIcon: <Network_3 size={20} />,
+      status: 'running',
+    },
+    {
+      id: '12',
+      name: 'iks-dev-cluster-03',
+      group: 'default',
+      location: 'us-south-2',
+      product: 'Clusters',
+      productIcon: <Network_3 size={20} />,
+      status: 'running',
+    },
+    {
+      id: '13',
+      name: 'log-prod-us-south',
+      group: 'observability',
+      location: 'us-south-1',
+      product: 'Logging instances',
+      productIcon: <Activity size={20} />,
+      status: 'running',
+    },
+    {
+      id: '14',
+      name: 'log-staging-eu-de',
+      group: 'staging',
+      location: 'eu-de-1',
+      product: 'Logging instances',
+      productIcon: <Activity size={20} />,
+      status: 'running',
+    },
+    {
+      id: '15',
+      name: 'log-dev-analytics',
+      group: 'analytics',
+      location: 'us-south-2',
+      product: 'Logging instances',
+      productIcon: <Activity size={20} />,
+      status: 'running',
+    },
+    {
+      id: '16',
+      name: 'mon-prod-infra',
+      group: 'observability',
+      location: 'us-south-1',
+      product: 'Monitoring instances',
+      productIcon: <Activity size={20} />,
+      status: 'running',
+    },
+    {
+      id: '17',
+      name: 'mon-app-performance',
+      group: 'production',
+      location: 'us-south-2',
+      product: 'Monitoring instances',
+      productIcon: <Activity size={20} />,
+      status: 'running',
+    },
+    {
+      id: '18',
+      name: 'mon-network-health',
+      group: 'default',
+      location: 'us-south-3',
+      product: 'Monitoring instances',
+      productIcon: <Activity size={20} />,
+      status: 'running',
+    },
+    {
+      id: '19',
+      name: 'db-prod-postgres-01',
+      group: 'production',
+      location: 'us-south-1',
+      product: 'Databases',
+      productIcon: <DataBase size={20} />,
+      status: 'running',
+    },
+    {
+      id: '20',
+      name: 'db-analytics-mysql',
+      group: 'analytics',
+      location: 'eu-de-1',
+      product: 'Databases',
+      productIcon: <DataBase size={20} />,
+      status: 'running',
+    },
+  ];
+
+  // Get 8 random resources
+  const getRandomResources = (resources: Resource[], count: number): Resource[] => {
+    const shuffled = [...resources].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  };
+
+  const [recentlyVisited] = useState<Resource[]>(() => getRandomResources(allResources, 8));
 
   const handleFilterToggle = (filter: string) => {
     setSelectedFilter(filter);
+  };
+
+  const handleOpenEditPinnedModal = () => {
+    setIsEditPinnedModalOpen(true);
+  };
+
+  const handleCloseEditPinnedModal = () => {
+    setIsEditPinnedModalOpen(false);
   };
 
   const handleOpenEditModal = () => {
@@ -206,28 +420,41 @@ const Home: React.FC<HomeProps> = ({
             <Column lg={16} md={8} sm={4}>
               <div className="shortcuts-section">
                 <h2 className="section-title">Shortcuts</h2>
-                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem', marginBottom: '1rem' }}>
-                  <Tag
-                    type={selectedFilter === 'all' ? 'high-contrast' : 'outline'}
-                    onClick={() => handleFilterToggle('all')}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    Getting started
-                  </Tag>
-                  <Tag
-                    type={selectedFilter === 'pinned' ? 'high-contrast' : 'outline'}
-                    onClick={() => handleFilterToggle('pinned')}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    Pinned (4)
-                  </Tag>
-                  <Tag
-                    type={selectedFilter === 'products' ? 'high-contrast' : 'outline'}
-                    onClick={() => handleFilterToggle('products')}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    My products (16)
-                  </Tag>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem', marginBottom: '1rem' }}>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <Tag
+                      type={selectedFilter === 'all' ? 'high-contrast' : 'outline'}
+                      onClick={() => handleFilterToggle('all')}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      Getting started
+                    </Tag>
+                    <Tag
+                      type={selectedFilter === 'pinned' ? 'high-contrast' : 'outline'}
+                      onClick={() => handleFilterToggle('pinned')}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      Pinned (4)
+                    </Tag>
+                    <Tag
+                      type={selectedFilter === 'products' ? 'high-contrast' : 'outline'}
+                      onClick={() => handleFilterToggle('products')}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      My products (16)
+                    </Tag>
+                  </div>
+                  {selectedFilter === 'pinned' && (
+                    <Button
+                      kind="ghost"
+                      size="sm"
+                      renderIcon={Edit}
+                      iconDescription="Edit list"
+                      onClick={handleOpenEditPinnedModal}
+                    >
+                      Edit list
+                    </Button>
+                  )}
                 </div>
               </div>
             </Column>
@@ -421,106 +648,28 @@ const Home: React.FC<HomeProps> = ({
                 </div>
                 <StructuredListWrapper>
                   <StructuredListBody>
-                    <StructuredListRow>
-                      <StructuredListCell>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <VirtualMachine size={20} />
-                          <span>IBM VCFaaS Multitenant - DAL</span>
-                        </div>
-                      </StructuredListCell>
-                      <StructuredListCell>VCF as a Service - Cloud Director Site</StructuredListCell>
-                      <StructuredListCell>
-                        <ChevronRight size={16} />
-                      </StructuredListCell>
-                    </StructuredListRow>
-                    <StructuredListRow>
-                      <StructuredListCell>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <DataBase size={20} />
-                          <span>pio-migration-classic-to-vpc</span>
-                        </div>
-                      </StructuredListCell>
-                      <StructuredListCell>DNS services</StructuredListCell>
-                      <StructuredListCell>
-                        <ChevronRight size={16} />
-                      </StructuredListCell>
-                    </StructuredListRow>
-                    <StructuredListRow>
-                      <StructuredListCell>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <Cube size={20} />
-                          <span>pgw-1e9fa90b-faa6-11ef-b793-397dbed...</span>
-                        </div>
-                      </StructuredListCell>
-                      <StructuredListCell>Virtual Private Endpoint for VPC</StructuredListCell>
-                      <StructuredListCell>
-                        <ChevronRight size={16} />
-                      </StructuredListCell>
-                    </StructuredListRow>
-                    <StructuredListRow>
-                      <StructuredListCell>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <Code size={20} />
-                          <span>my-website</span>
-                        </div>
-                      </StructuredListCell>
-                      <StructuredListCell>Security Group for VPC</StructuredListCell>
-                      <StructuredListCell>
-                        <ChevronRight size={16} />
-                      </StructuredListCell>
-                    </StructuredListRow>
-                    <StructuredListRow>
-                      <StructuredListCell>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <DataBase size={20} />
-                          <span>containers-cluster1</span>
-                        </div>
-                      </StructuredListCell>
-                      <StructuredListCell>Load Balancer Endpoint for VPC</StructuredListCell>
-                      <StructuredListCell>
-                        <ChevronRight size={16} />
-                      </StructuredListCell>
-                    </StructuredListRow>
-                    <StructuredListRow>
-                      <StructuredListCell>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <Activity size={20} />
-                          <span>Project 1</span>
-                        </div>
-                      </StructuredListCell>
-                      <StructuredListCell>Red Hat Openshift on IBM Cloud</StructuredListCell>
-                      <StructuredListCell>
-                        <ChevronRight size={16} />
-                      </StructuredListCell>
-                    </StructuredListRow>
-                    <StructuredListRow>
-                      <StructuredListCell>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <DataBase size={20} />
-                          <span>cos-observe-storage</span>
-                        </div>
-                      </StructuredListCell>
-                      <StructuredListCell>Vmware Solutions</StructuredListCell>
-                      <StructuredListCell>
-                        <ChevronRight size={16} />
-                      </StructuredListCell>
-                    </StructuredListRow>
-                    <StructuredListRow>
-                      <StructuredListCell>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <Code size={20} />
-                          <span>pgw-1e9fa90b-faa6-11ef-b793-397dbed...</span>
-                        </div>
-                      </StructuredListCell>
-                      <StructuredListCell>Code Engine</StructuredListCell>
-                      <StructuredListCell>
-                        <ChevronRight size={16} />
-                      </StructuredListCell>
-                    </StructuredListRow>
+                    {recentlyVisited.map((resource) => (
+                      <StructuredListRow
+                        key={resource.id}
+                        onClick={() => navigate(`/resources/${resource.name}`)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <StructuredListCell>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            {resource.productIcon}
+                            <span>{resource.name}</span>
+                          </div>
+                        </StructuredListCell>
+                        <StructuredListCell>{resource.product}</StructuredListCell>
+                        <StructuredListCell style={{ width: '48px' }}>
+                          <ChevronRight size={16} />
+                        </StructuredListCell>
+                      </StructuredListRow>
+                    ))}
                   </StructuredListBody>
                 </StructuredListWrapper>
                 <div className="card-footer">
-                  <Link href="#">View all resources</Link>
+                  <Link href="#" onClick={(e) => { e.preventDefault(); navigate('/resources'); }}>View all resources</Link>
                 </div>
               </div>
             </Column>
@@ -814,6 +963,111 @@ const Home: React.FC<HomeProps> = ({
             />
           </Stack>
         </Form>
+      </Modal>
+
+      {/* Edit Pinned List Modal */}
+      <Modal
+        open={isEditPinnedModalOpen}
+        onRequestClose={handleCloseEditPinnedModal}
+        modalHeading="Edit Pinned list"
+        passiveModal
+        size="md"
+      >
+        <div style={{ marginBottom: '1.5rem' }}>
+          <h4 style={{ fontSize: '0.875rem', fontWeight: 400, marginBottom: '0.5rem', color: '#525252' }}>
+            Add a new page
+          </h4>
+          <Search
+            placeholder="Search for a new page to pin"
+            labelText="Search"
+            closeButtonLabelText="Clear search"
+            size="lg"
+          />
+        </div>
+
+        <div style={{ marginTop: '2rem' }}>
+          <h4 style={{ fontSize: '0.875rem', fontWeight: 400, marginBottom: '1rem', color: '#525252' }}>
+            Unpin an item to remove from list
+          </h4>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '1rem',
+              borderBottom: '1px solid #e0e0e0'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <Renew size={20} />
+                <span>cluster01 / Working nodes</span>
+              </div>
+              <IconButton
+                label="Unpin"
+                kind="ghost"
+                size="sm"
+              >
+                <Pin size={16} />
+              </IconButton>
+            </div>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '1rem',
+              borderBottom: '1px solid #e0e0e0'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <Renew size={20} />
+                <span>cluster0115 / Ingress</span>
+              </div>
+              <IconButton
+                label="Unpin"
+                kind="ghost"
+                size="sm"
+              >
+                <Pin size={16} />
+              </IconButton>
+            </div>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '1rem',
+              borderBottom: '1px solid #e0e0e0'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <Settings size={20} />
+                <span>Billing and usage</span>
+              </div>
+              <IconButton
+                label="Unpin"
+                kind="ghost"
+                size="sm"
+              >
+                <Pin size={16} />
+              </IconButton>
+            </div>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '1rem',
+              borderBottom: '1px solid #e0e0e0'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <Settings size={20} />
+                <span>Access (IAM)</span>
+              </div>
+              <IconButton
+                label="Unpin"
+                kind="ghost"
+                size="sm"
+              >
+                <Pin size={16} />
+              </IconButton>
+            </div>
+          </div>
+        </div>
       </Modal>
     </Content>
   );

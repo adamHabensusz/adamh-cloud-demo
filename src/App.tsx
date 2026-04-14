@@ -11,6 +11,12 @@ import {
   SideNavLink,
   Theme,
   Button,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+  TextInput,
 } from '@carbon/react';
 import {
   Notification,
@@ -28,12 +34,23 @@ import {
   AiLaunch,
   Asleep,
   Light,
+  Close,
+  Chat,
+  Calendar,
+  ChartLine,
+  ThumbsUp,
+  ThumbsDown,
+  Renew,
+  SendAlt,
+  Microphone,
+  OverflowMenuHorizontal,
 } from '@carbon/icons-react';
 import Home from './Home';
 import ProductCatalog from './ProductCatalog';
 import Create from './Create';
 import Activities from './Activities';
 import ResourceList from './ResourceList';
+import ResourceDetails from './ResourceDetails';
 import './App.scss';
 
 const AppContent: React.FC = () => {
@@ -43,12 +60,18 @@ const AppContent: React.FC = () => {
   const [accountId, setAccountId] = useState('124849');
   const [accountName, setAccountName] = useState("Adam Habensusz's Account");
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isAiPanelOpen, setIsAiPanelOpen] = useState(false);
 
   // Collapse side nav when navigating to Create page
   React.useEffect(() => {
     if (location.pathname === '/create') {
       setIsSideNavOpen(false);
     }
+  }, [location.pathname]);
+
+  // Reset scroll position to top on route change
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
   }, [location.pathname]);
 
   return (
@@ -125,6 +148,7 @@ const AppContent: React.FC = () => {
                   iconDescription="AI Assistant"
                   hasIconOnly
                   className="ai-button"
+                  onClick={() => setIsAiPanelOpen(!isAiPanelOpen)}
                 />
               </HeaderGlobalBar>
             </Header>
@@ -175,6 +199,135 @@ const AppContent: React.FC = () => {
               </SideNavItems>
             </SideNav>
 
+            {/* AI Side Panel */}
+            <div className={`ai-side-panel ${isAiPanelOpen ? 'ai-side-panel--open' : ''}`}>
+              <div className="ai-panel-header">
+                <div className="ai-panel-header-left">
+                  <Button
+                    kind="ghost"
+                    size="sm"
+                    renderIcon={Menu}
+                    iconDescription="Menu"
+                    hasIconOnly
+                  />
+                  <h2 className="ai-panel-title">IBM Cloud AI</h2>
+                </div>
+                <Button
+                  kind="ghost"
+                  size="sm"
+                  renderIcon={Close}
+                  iconDescription="Close"
+                  hasIconOnly
+                  onClick={() => setIsAiPanelOpen(false)}
+                />
+              </div>
+
+              <Tabs>
+                <TabList aria-label="AI Panel tabs" contained>
+                  <Tab renderIcon={Chat}>Chat</Tab>
+                  <Tab renderIcon={Calendar}>Calendar</Tab>
+                  <Tab renderIcon={ChartLine}>Chart</Tab>
+                  <Tab renderIcon={Help}>Help</Tab>
+                </TabList>
+                <TabPanels>
+                  <TabPanel>
+                    <div className="ai-chat-content">
+                      <div className="ai-message">
+                        <div className="ai-message-avatar">
+                          <AiLaunch size={20} />
+                        </div>
+                        <div className="ai-message-content">
+                          <div className="ai-message-header">
+                            <span className="ai-message-sender">IBM Cloud AI</span>
+                            <span className="ai-message-time">12:46</span>
+                          </div>
+                          <div className="ai-message-text">
+                            <p>Hi! I'm Finn, an AI-powered agent for IBM Cloud.</p>
+                            <p>I can answer questions, help you understand your infrastructure, or even help you make new things.</p>
+                            <p>What can I do for you today?</p>
+                          </div>
+                          <div className="ai-message-actions">
+                            <Button
+                              kind="ghost"
+                              size="sm"
+                              renderIcon={ThumbsUp}
+                              iconDescription="Like"
+                              hasIconOnly
+                            />
+                            <Button
+                              kind="ghost"
+                              size="sm"
+                              renderIcon={ThumbsDown}
+                              iconDescription="Dislike"
+                              hasIconOnly
+                            />
+                            <Button
+                              kind="ghost"
+                              size="sm"
+                              renderIcon={Renew}
+                              iconDescription="Regenerate"
+                              hasIconOnly
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="ai-input-container">
+                      <Button
+                        kind="ghost"
+                        size="sm"
+                        renderIcon={Menu}
+                        iconDescription="Menu"
+                        hasIconOnly
+                      />
+                      <TextInput
+                        id="ai-input"
+                        labelText=""
+                        placeholder="Type something..."
+                        size="lg"
+                      />
+                      <Button
+                        kind="ghost"
+                        size="sm"
+                        renderIcon={Microphone}
+                        iconDescription="Voice input"
+                        hasIconOnly
+                      />
+                      <Button
+                        kind="ghost"
+                        size="sm"
+                        renderIcon={SendAlt}
+                        iconDescription="Send"
+                        hasIconOnly
+                      />
+                      <Button
+                        kind="ghost"
+                        size="sm"
+                        renderIcon={OverflowMenuHorizontal}
+                        iconDescription="More options"
+                        hasIconOnly
+                      />
+                    </div>
+                  </TabPanel>
+                  <TabPanel>
+                    <div className="ai-panel-content">
+                      <p>Calendar content coming soon...</p>
+                    </div>
+                  </TabPanel>
+                  <TabPanel>
+                    <div className="ai-panel-content">
+                      <p>Chart content coming soon...</p>
+                    </div>
+                  </TabPanel>
+                  <TabPanel>
+                    <div className="ai-panel-content">
+                      <p>Help content coming soon...</p>
+                    </div>
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </div>
+
             <Routes>
               <Route
                 path="/"
@@ -192,6 +345,7 @@ const AppContent: React.FC = () => {
               <Route path="/catalog" element={<ProductCatalog />} />
               <Route path="/activities" element={<Activities />} />
               <Route path="/resources" element={<ResourceList />} />
+              <Route path="/resources/:resourceId" element={<ResourceDetails />} />
               <Route path="/create" element={<Create />} />
             </Routes>
           </>

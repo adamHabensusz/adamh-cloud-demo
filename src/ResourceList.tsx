@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Content,
   Grid,
@@ -18,7 +19,6 @@ import {
   TableToolbarSearch,
   Button,
   Link,
-  Tag,
 } from '@carbon/react';
 import {
   Filter,
@@ -32,6 +32,9 @@ import {
   CloudApp,
   ChartLineData,
   Dashboard,
+  CheckmarkFilled,
+  ErrorFilled,
+  WarningFilled,
 } from '@carbon/icons-react';
 import './Activities.scss';
 
@@ -46,6 +49,8 @@ interface Resource {
 }
 
 const ResourceList: React.FC = () => {
+  const navigate = useNavigate();
+  
   const resources: Resource[] = [
     {
       id: '1',
@@ -238,22 +243,37 @@ const ResourceList: React.FC = () => {
     { key: 'actions', header: '' },
   ];
 
-  const getStatusTag = (status: string) => {
+  const getStatusIndicator = (status: string) => {
     switch (status) {
       case 'running':
-        return <Tag type="green" size="sm">Running</Tag>;
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <CheckmarkFilled size={16} style={{ fill: '#24a148' }} />
+            <span>Running</span>
+          </div>
+        );
       case 'failed':
-        return <Tag type="red" size="sm">Failed</Tag>;
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <ErrorFilled size={16} style={{ fill: '#da1e28' }} />
+            <span>Failed</span>
+          </div>
+        );
       case 'warning':
-        return <Tag type="warm-gray" size="sm">Warning</Tag>;
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <WarningFilled size={16} style={{ fill: '#f1c21b' }} />
+            <span>Warning</span>
+          </div>
+        );
       default:
-        return <Tag size="sm">{status}</Tag>;
+        return <span>{status}</span>;
     }
   };
 
   const rows = resources.map((resource) => ({
     id: resource.id,
-    name: <Link href="#">{resource.name}</Link>,
+    name: <Link href="#" onClick={(e) => { e.preventDefault(); navigate(`/resources/${resource.name}`); }}>{resource.name}</Link>,
     group: resource.group,
     location: resource.location,
     product: (
@@ -262,7 +282,7 @@ const ResourceList: React.FC = () => {
         <Link href="#">{resource.product}</Link>
       </div>
     ),
-    status: getStatusTag(resource.status),
+    status: getStatusIndicator(resource.status),
     actions: (
       <Button
         kind="ghost"
@@ -316,15 +336,16 @@ const ResourceList: React.FC = () => {
                     <TableToolbar>
                       <TableToolbarContent>
                         <TableToolbarSearch
-                          placeholder="Search input text"
+                          placeholder="Search"
                           persistent
                         />
                         <Button
                           kind="ghost"
-                          hasIconOnly
                           renderIcon={Filter}
                           iconDescription="Filter"
-                        />
+                        >
+                          Filter
+                        </Button>
                         <Button
                           kind="ghost"
                           hasIconOnly
