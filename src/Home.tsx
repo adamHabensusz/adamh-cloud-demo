@@ -15,6 +15,7 @@ import {
   Stack,
   Grid,
   Column,
+  Tag,
 } from '@carbon/react';
 import {
   Cube,
@@ -33,6 +34,11 @@ import {
   CaretDown,
   InProgress,
   Activity,
+  Catalog,
+  Deploy,
+  Document,
+  Settings,
+  Renew,
 } from '@carbon/icons-react';
 import ChatField from './components/ChatField';
 
@@ -58,6 +64,11 @@ const Home: React.FC<HomeProps> = ({
   const [tempUserName, setTempUserName] = useState(userName);
   const [tempAccountId, setTempAccountId] = useState(accountId);
   const [tempAccountName, setTempAccountName] = useState(accountName);
+  const [selectedFilter, setSelectedFilter] = useState<string>('all');
+
+  const handleFilterToggle = (filter: string) => {
+    setSelectedFilter(filter);
+  };
 
   const handleOpenEditModal = () => {
     setTempUserName(userName);
@@ -195,12 +206,119 @@ const Home: React.FC<HomeProps> = ({
             <Column lg={16} md={8} sm={4}>
               <div className="shortcuts-section">
                 <h2 className="section-title">Shortcuts</h2>
+                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem', marginBottom: '1rem' }}>
+                  <Tag
+                    type={selectedFilter === 'all' ? 'high-contrast' : 'outline'}
+                    onClick={() => handleFilterToggle('all')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    Getting started
+                  </Tag>
+                  <Tag
+                    type={selectedFilter === 'pinned' ? 'high-contrast' : 'outline'}
+                    onClick={() => handleFilterToggle('pinned')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    Pinned (4)
+                  </Tag>
+                  <Tag
+                    type={selectedFilter === 'products' ? 'high-contrast' : 'outline'}
+                    onClick={() => handleFilterToggle('products')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    My products (16)
+                  </Tag>
+                </div>
               </div>
             </Column>
             
-            <Column lg={2} md={2} sm={2}>
+            {selectedFilter === 'all' && (
+              <>
+                <Column lg={4} md={4} sm={4}>
+                  <Tile className="getting-started-tile">
+                    <Cube size={24} className="tile-icon" />
+                    <h3 className="tile-title">Create your first resource</h3>
+                    <p className="tile-description">
+                      Resources are on-demand services created and managed in the cloud.
+                    </p>
+                  </Tile>
+                </Column>
+                <Column lg={4} md={4} sm={4}>
+                  <Tile className="getting-started-tile">
+                    <Catalog size={24} className="tile-icon" />
+                    <h3 className="tile-title">Explore our product catalog</h3>
+                    <p className="tile-description">
+                      Discover our industry leading products and solutions.
+                    </p>
+                  </Tile>
+                </Column>
+                <Column lg={4} md={4} sm={4}>
+                  <Tile className="getting-started-tile">
+                    <Deploy size={24} className="tile-icon" />
+                    <h3 className="tile-title">Deploy deployable architectures</h3>
+                    <p className="tile-description">
+                      Explore pre-built compositions of products that work together.
+                    </p>
+                  </Tile>
+                </Column>
+                <Column lg={4} md={4} sm={4}>
+                  <Tile className="getting-started-tile">
+                    <Document size={24} className="tile-icon" />
+                    <h3 className="tile-title">IBM Cloud documentation</h3>
+                    <p className="tile-description">
+                      Visit the IBM Cloud Docs page to help you get started in the right direction.
+                    </p>
+                  </Tile>
+                </Column>
+              </>
+            )}
+
+            {selectedFilter === 'pinned' && (
+              <>
+                <Column lg={4} md={4} sm={4}>
+                  <Tile className="getting-started-tile">
+                    <Settings size={24} className="tile-icon" />
+                    <h3 className="tile-title">Billing and usage</h3>
+                    <p className="tile-description">
+                      
+                    </p>
+                  </Tile>
+                </Column>
+                <Column lg={4} md={4} sm={4}>
+                  <Tile className="getting-started-tile">
+                    <Settings size={24} className="tile-icon" />
+                    <h3 className="tile-title">Access (IAM)</h3>
+                    <p className="tile-description">
+                      
+                    </p>
+                  </Tile>
+                </Column>
+                <Column lg={4} md={4} sm={4}>
+                  <Tile className="getting-started-tile">
+                    <Renew size={24} className="tile-icon" />
+                    <h3 className="tile-title">cluster01</h3>
+                    <p className="tile-description">
+                      Working nodes
+                    </p>
+                  </Tile>
+                </Column>
+                <Column lg={4} md={4} sm={4}>
+                  <Tile className="getting-started-tile">
+                    <Renew size={24} className="tile-icon" />
+                    <h3 className="tile-title">cluster0115</h3>
+                    <p className="tile-description">
+                      Ingress
+                    </p>
+                  </Tile>
+                </Column>
+              </>
+            )}
+
+            {selectedFilter === 'products' && (
+              <>
+                <Column lg={2} md={2} sm={2}>
               <Tile className="shortcut-tile">
-                <Cube size={32} />
+                <Cube size={24} />
                 <div className="shortcut-info">
                   <span className="shortcut-name">Containers</span>
                   <span className="shortcut-count">5 resources</span>
@@ -209,7 +327,7 @@ const Home: React.FC<HomeProps> = ({
             </Column>
             <Column lg={2} md={2} sm={2}>
               <Tile className="shortcut-tile">
-                <Code size={32} />
+                <Code size={24} />
                 <div className="shortcut-info">
                   <span className="shortcut-name">Code Engine</span>
                   <span className="shortcut-count">5 resources</span>
@@ -218,7 +336,7 @@ const Home: React.FC<HomeProps> = ({
             </Column>
             <Column lg={2} md={2} sm={2}>
               <Tile className="shortcut-tile">
-                <WatsonHealth3DCursor size={32} />
+                <WatsonHealth3DCursor size={24} />
                 <div className="shortcut-info">
                   <span className="shortcut-name">watsonx</span>
                   <span className="shortcut-count">5 resources</span>
@@ -227,7 +345,7 @@ const Home: React.FC<HomeProps> = ({
             </Column>
             <Column lg={2} md={2} sm={2}>
               <Tile className="shortcut-tile">
-                <Gateway size={32} />
+                <Gateway size={24} />
                 <div className="shortcut-info">
                   <span className="shortcut-name">Transit Gateway</span>
                   <span className="shortcut-count">5 resources</span>
@@ -236,7 +354,7 @@ const Home: React.FC<HomeProps> = ({
             </Column>
             <Column lg={2} md={2} sm={2}>
               <Tile className="shortcut-tile">
-                <DataBase size={32} />
+                <DataBase size={24} />
                 <div className="shortcut-info">
                   <span className="shortcut-name">Block Storage for VPC</span>
                   <span className="shortcut-count">5 resources</span>
@@ -245,7 +363,7 @@ const Home: React.FC<HomeProps> = ({
             </Column>
             <Column lg={2} md={2} sm={2}>
               <Tile className="shortcut-tile">
-                <DataBase size={32} />
+                <DataBase size={24} />
                 <div className="shortcut-info">
                   <span className="shortcut-name">Databases</span>
                   <span className="shortcut-count">5 resources</span>
@@ -254,7 +372,7 @@ const Home: React.FC<HomeProps> = ({
             </Column>
             <Column lg={2} md={2} sm={2}>
               <Tile className="shortcut-tile">
-                <VirtualMachine size={32} />
+                <VirtualMachine size={24} />
                 <div className="shortcut-info">
                   <span className="shortcut-name">File Storage for VPC</span>
                   <span className="shortcut-count">5 resources</span>
@@ -263,13 +381,15 @@ const Home: React.FC<HomeProps> = ({
             </Column>
             <Column lg={2} md={2} sm={2}>
               <Tile className="shortcut-tile">
-                <Network_3 size={32} />
+                <Network_3 size={24} />
                 <div className="shortcut-info">
                   <span className="shortcut-name">VMware Solutions</span>
                   <span className="shortcut-count">5 resources</span>
                 </div>
               </Tile>
             </Column>
+              </>
+            )}
 
             {/* Main Content Grid */}
             <Column lg={16} md={8} sm={4}>
